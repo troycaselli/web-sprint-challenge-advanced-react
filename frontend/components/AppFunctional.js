@@ -51,9 +51,11 @@ export default function AppFunctional(props) {
       "y": 2, 
       "steps": 3, 
       "email": email }
+
     axios.post(URL, newSubmission)
       .then(res => setMessage(res.data.message))
       .catch(err => console.error(err));
+    setEmail('');
   }
 
   return (
