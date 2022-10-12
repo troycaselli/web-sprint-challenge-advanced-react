@@ -7,7 +7,7 @@ const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 const URL = 'http://localhost:9000/api/result';
-let moveCount = -1;
+let moveCount = 0;
 
 export default function AppFunctional(props) {
   const [message, setMessage] = useState(initialMessage);
@@ -39,7 +39,6 @@ export default function AppFunctional(props) {
     // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
     // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage` returns the fully constructed string.
     const result = getXY();
-    moveCount++;
     return(`Coordinates (${result[0]}, ${result[1]})`);
   }
 
@@ -57,10 +56,27 @@ export default function AppFunctional(props) {
 
   function getNextIndex(direction) {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index of the "B" would be. If the move is impossible because we are at the edge of the grid, this helper should return the current index unchanged.
+    if(direction === 'left' && index - 1 >= 0) {
+      move();
+      return setIndex(index - 1);
+    } else if(direction === 'right' && index + 1 <= 8) {
+      move();
+      return setIndex(index + 1);
+    } else if(direction === 'up' && index - 3 >= 0) {
+      move();
+      return setIndex(index - 3);
+    } else if(direction === 'down' && index + 3 <= 8) {
+      move();
+      return setIndex(index + 3);
+    } else {
+      return setMessage(`You can't go ${direction}`);
+    }
   }
 
-  function move(evt) {
+  function move() {
     // This event handler can use the helper above to obtain a new index for the "B", and change any states accordingly.
+    setMessage(initialMessage);
+    moveCount++;
   }
 
   function onChange(evt) {
@@ -102,10 +118,10 @@ export default function AppFunctional(props) {
         <h3 id="message">{message}</h3>
       </div>
       <div id="keypad">
-        <button id="left" >LEFT</button>
-        <button id="up" >UP</button>
-        <button id="right" >RIGHT</button>
-        <button id="down" >DOWN</button>
+        <button id="left" onClick={() => getNextIndex('left')} >LEFT</button>
+        <button id="up" onClick={() => getNextIndex('up')}>UP</button>
+        <button id="right" onClick={() => getNextIndex('right')}>RIGHT</button>
+        <button id="down" onClick={() => getNextIndex('down')}>DOWN</button>
         <button id="reset" onClick={reset}>reset</button>
       </div>
       <form onSubmit={(evt) => onSubmit(evt)}>
