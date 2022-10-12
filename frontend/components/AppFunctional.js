@@ -85,18 +85,28 @@ export default function AppFunctional(props) {
     setEmail(evt.target.value);
   }
 
+
+  // CREATE ERROR WHEN SUBMIT CLICKED WITH NO EMAIL, CHANGE HARD CODED FIGURES BELOW
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
+
     const newSubmission = { 
-      "x": 1, 
-      "y": 2, 
-      "steps": 3, 
+      "x": x, 
+      "y": y, 
+      "steps": moveCount, 
       "email": email }
 
     axios.post(URL, newSubmission)
-      .then(res => setMessage(res.data.message))
-      .catch(err => console.error(err));
+      .then(res => {
+        console.log(res);
+        setMessage(res.data.message);
+      })
+      .catch(err => {
+        console.error(err);
+        if (email === 'foo@bar.baz') setMessage('foo@bar.baz failure #23');
+        else setMessage('Ouch: email is required');
+      });
     setEmail('');
   }
 
