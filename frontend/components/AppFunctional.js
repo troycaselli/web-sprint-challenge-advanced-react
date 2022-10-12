@@ -49,6 +49,10 @@ export default function AppFunctional(props) {
 
   function reset() {
     // Use this helper to reset all states to their initial values.
+    setMessage(initialMessage);
+    setEmail(initialEmail);
+    setSteps(initialSteps);
+    setIndex(initialIndex);
   }
 
   function getNextIndex(direction) {
@@ -98,11 +102,11 @@ export default function AppFunctional(props) {
         <h3 id="message">{message}</h3>
       </div>
       <div id="keypad">
-        <button id="left">LEFT</button>
-        <button id="up">UP</button>
-        <button id="right">RIGHT</button>
-        <button id="down">DOWN</button>
-        <button id="reset">reset</button>
+        <button id="left" >LEFT</button>
+        <button id="up" >UP</button>
+        <button id="right" >RIGHT</button>
+        <button id="down" >DOWN</button>
+        <button id="reset" onClick={reset}>reset</button>
       </div>
       <form onSubmit={(evt) => onSubmit(evt)}>
         <input 
