@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react';
 
 // Suggested initial states
 const initialMessage = ''
@@ -7,8 +7,7 @@ const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 
 export default function AppFunctional(props) {
-  // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
-  // You can delete them and build your own logic from scratch.
+  const [email, setEmail] = useState(initialEmail);
 
   function getXY() {
     // It it not necessary to have a state to track the coordinates.
@@ -38,6 +37,7 @@ export default function AppFunctional(props) {
 
   function onChange(evt) {
     // You will need this to update the value of the input.
+    setEmail(evt.target.value);
   }
 
   function onSubmit(evt) {
@@ -70,8 +70,17 @@ export default function AppFunctional(props) {
         <button id="reset">reset</button>
       </div>
       <form>
-        <input id="email" type="email" placeholder="type email"></input>
-        <input id="submit" type="submit"></input>
+        <input 
+          id="email" 
+          type="email" 
+          placeholder="type email" 
+          value={email} 
+          onChange={(evt) => onChange(evt)}>
+        </input>
+        <input 
+          id="submit" 
+          type="submit">
+        </input>
       </form>
     </div>
   )
