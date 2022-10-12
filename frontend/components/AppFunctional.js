@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 
 // Suggested initial states
 const initialMessage = ''
 const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
+const URL = 'http://localhost:9000/api/result';
 
 export default function AppFunctional(props) {
+  const [message, setMessage] = useState(initialMessage);
   const [email, setEmail] = useState(initialEmail);
 
   function getXY() {
@@ -42,6 +45,15 @@ export default function AppFunctional(props) {
 
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
+    evt.preventDefault();
+    const newSubmission = { 
+      "x": 1, 
+      "y": 2, 
+      "steps": 3, 
+      "email": email }
+    axios.post(URL, newSubmission)
+      .then(res => setMessage(res.data.message))
+      .catch(err => console.error(err));
   }
 
   return (
@@ -60,7 +72,7 @@ export default function AppFunctional(props) {
         }
       </div>
       <div className="info">
-        <h3 id="message"></h3>
+        <h3 id="message">{message}</h3>
       </div>
       <div id="keypad">
         <button id="left">LEFT</button>
@@ -69,10 +81,10 @@ export default function AppFunctional(props) {
         <button id="down">DOWN</button>
         <button id="reset">reset</button>
       </div>
-      <form>
+      <form onSubmit={(evt) => onSubmit(evt)}>
         <input 
           id="email" 
-          type="email" 
+          type="email"
           placeholder="type email" 
           value={email} 
           onChange={(evt) => onChange(evt)}>
