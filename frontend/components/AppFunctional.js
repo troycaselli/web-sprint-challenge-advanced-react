@@ -10,6 +10,8 @@ const URL = 'http://localhost:9000/api/result';
 let moveCount = 0;
 
 export default function AppFunctional(props) {
+  let x, y = null;
+
   const [message, setMessage] = useState(initialMessage);
   const [email, setEmail] = useState(initialEmail);
   const [steps, setSteps] = useState(initialSteps);
@@ -18,7 +20,6 @@ export default function AppFunctional(props) {
   function getXY() {
     // It it not necessary to have a state to track the coordinates.
     // It's enough to know what index the "B" is at, to be able to calculate them.
-    let x, y = null;
     let coordinates = {x: null, y: null};
     if(index < 3) {
       x = index + 1;
@@ -56,16 +57,16 @@ export default function AppFunctional(props) {
 
   function getNextIndex(direction) {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index of the "B" would be. If the move is impossible because we are at the edge of the grid, this helper should return the current index unchanged.
-    if(direction === 'left' && index - 1 >= 0) {
+    if(direction === 'left' && index - 1 >= 0 && x > 1) {
       move();
       return setIndex(index - 1);
-    } else if(direction === 'right' && index + 1 <= 8) {
+    } else if(direction === 'right' && index + 1 <= 8 && x < 3) {
       move();
       return setIndex(index + 1);
-    } else if(direction === 'up' && index - 3 >= 0) {
+    } else if(direction === 'up' && index - 3 >= 0 && y > 1) {
       move();
       return setIndex(index - 3);
-    } else if(direction === 'down' && index + 3 <= 8) {
+    } else if(direction === 'down' && index + 3 <= 8 && y < 3) {
       move();
       return setIndex(index + 3);
     } else {
