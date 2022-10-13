@@ -15,7 +15,6 @@ const initialIndex = 4 // the index the "B" is at
 // }
 
 const URL = 'http://localhost:9000/api/result';
-let moveCount = 0;
 let x = 2;
 let y = 2;
 
@@ -25,8 +24,8 @@ export default class AppClass extends React.Component {
     this.state = {
       message: initialMessage,
       email: initialEmail,
-      index: initialIndex,
       steps: initialSteps,
+      index: initialIndex,
     }
   }
 
@@ -67,30 +66,29 @@ export default class AppClass extends React.Component {
     })
   }
 
-  getNextIndex = async (direction) => {
+  getNextIndex = (direction) => {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
     if(direction === 'left' && this.state.index - 1 >= 0 && x > 1) {
-      await this.move();
-      return this.setState({...this.state, index: this.state.index - 1});
+      this.move();
+      this.setState({...this.state, index: this.state.index - 1});
     } else if(direction === 'right' && this.state.index + 1 <= 8 && x < 3) {
-      await this.move();
-      return this.setState({...this.state, index: this.state.index + 1});
+      this.move();
+      this.setState({...this.state, index: this.state.index + 1});
     } else if(direction === 'up' && this.state.index - 3 >= 0 && y > 1) {
-      await this.move();
-      return this.setState({...this.state, index: this.state.index - 3});
+      this.move();
+      this.setState({...this.state, index: this.state.index - 3});
     } else if(direction === 'down' && this.state.index + 3 <= 8 && y < 3) {
-      await this.move();
-      return this.setState({...this.state, index: this.state.index + 3});
+      this.move();
+      this.setState({...this.state, index: this.state.index + 3});
     } else {
-      return this.setState({...this.state, message: `You can't go ${direction}`});
+      this.setState({...this.state, message: `You can't go ${direction}`});
     }
   }
 
-  move = async () => {
-    // This event handler can use the helper above to obtain a new index for the "B",
-    // and change any states accordingly.
+  move = () => {
+    // This event handler can use the helper above to obtain a new index for the "B", and change any states accordingly.
     this.setState({...this.state, message: initialMessage});
     this.setState({...this.state, steps: this.state.steps + 1});
     console.log(this.state);

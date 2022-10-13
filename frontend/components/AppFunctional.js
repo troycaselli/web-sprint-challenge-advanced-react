@@ -7,7 +7,6 @@ const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 const URL = 'http://localhost:9000/api/result';
-let moveCount = 0;
 
 export default function AppFunctional(props) {
   let x, y = null;
@@ -73,7 +72,7 @@ export default function AppFunctional(props) {
   function move() {
     // This event handler can use the helper above to obtain a new index for the "B", and change any states accordingly.
     setMessage(initialMessage);
-    moveCount++;
+    setSteps(steps + 1);
   }
 
   function onChange(evt) {
@@ -90,7 +89,7 @@ export default function AppFunctional(props) {
     const newSubmission = { 
       "x": x, 
       "y": y, 
-      "steps": moveCount, 
+      "steps": steps, 
       "email": email
     }
 
@@ -101,8 +100,7 @@ export default function AppFunctional(props) {
       })
       .catch(err => {
         console.error(err);
-        if (email === 'foo@bar.baz') setMessage('foo@bar.baz failure #23');
-        else setMessage('Ouch: email is required');
+        setMessage(err.response.data.message);
       });
     setEmail('');
   }
@@ -111,7 +109,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved {moveCount} times</h3>
+        <h3 id="steps">You moved {steps} time{steps === 1 ? '' : 's'}</h3>
       </div>
       <div id="grid">
         {
