@@ -71,27 +71,28 @@ export default class AppClass extends React.Component {
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
     if(direction === 'left' && this.state.index - 1 >= 0 && x > 1) {
-      this.move();
-      this.setState({...this.state, index: this.state.index - 1});
+      this.setState({...this.state, 
+        index: this.state.index - 1, 
+        message: initialMessage, 
+        steps: this.state.steps + 1});
     } else if(direction === 'right' && this.state.index + 1 <= 8 && x < 3) {
-      this.move();
-      this.setState({...this.state, index: this.state.index + 1});
+      this.setState({...this.state, 
+        index: this.state.index + 1, 
+        message: initialMessage, 
+        steps: this.state.steps + 1});
     } else if(direction === 'up' && this.state.index - 3 >= 0 && y > 1) {
-      this.move();
-      this.setState({...this.state, index: this.state.index - 3});
+      this.setState({...this.state, 
+        index: this.state.index - 3, 
+        message: initialMessage, 
+        steps: this.state.steps + 1});
     } else if(direction === 'down' && this.state.index + 3 <= 8 && y < 3) {
-      this.move();
-      this.setState({...this.state, index: this.state.index + 3});
+      this.setState({...this.state, 
+        index: this.state.index + 3, 
+        message: initialMessage, 
+        steps: this.state.steps + 1});
     } else {
       this.setState({...this.state, message: `You can't go ${direction}`});
     }
-  }
-
-  move = () => {
-    // This event handler can use the helper above to obtain a new index for the "B", and change any states accordingly.
-    this.setState({...this.state, message: initialMessage});
-    this.setState({...this.state, steps: this.state.steps + 1});
-    console.log(this.state);
   }
 
   onChange = (evt) => {
@@ -117,8 +118,7 @@ export default class AppClass extends React.Component {
       })
       .catch(err => {
         console.error(err);
-        if (this.state.email === 'foo@bar.baz') this.setState({...this.state, message: 'foo@bar.baz failure #23'});
-        else this.setState({...this.state, message: 'Ouch: email is required'});
+        this.setState({...this.state, message: err.response.data.message});
       })
       this.setState({...this.state, email: ''});
   }
@@ -129,7 +129,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{this.getXYMessage()}</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="steps">You moved {this.state.steps} time{this.state.steps === 1 ? '' : 's'}</h3>
         </div>
         <div id="grid">
           {
