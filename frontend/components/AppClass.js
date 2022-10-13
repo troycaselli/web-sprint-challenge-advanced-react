@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
 
 // Suggested initial states
 const initialMessage = ''
@@ -6,16 +7,28 @@ const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 
-const initialState = {
-  message: initialMessage,
-  email: initialEmail,
-  index: initialIndex,
-  steps: initialSteps,
-}
+// const initialState = {
+//   message: initialMessage,
+//   email: initialEmail,
+//   index: initialIndex,
+//   steps: initialSteps,
+// }
+
+const URL = 'http://localhost:9000/api/result';
+let moveCount = 0;
+let x = 2;
+let y = 2;
 
 export default class AppClass extends React.Component {
-  // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
-  // You can delete them and build your own logic from scratch.
+  constructor() {
+    super();
+    this.state = {
+      message: initialMessage,
+      email: initialEmail,
+      index: initialIndex,
+      steps: initialSteps,
+    }
+  }
 
   getXY = () => {
     // It it not necessary to have a state to track the coordinates.
@@ -45,10 +58,31 @@ export default class AppClass extends React.Component {
 
   onChange = (evt) => {
     // You will need this to update the value of the input.
+    this.setState({...this.state, email: evt.target.value});
   }
 
   onSubmit = (evt) => {
     // Use a POST request to send a payload to the server.
+    evt.preventDefault();
+
+    const newSubmission = {
+      x: x,
+      y: y, 
+      steps: moveCount, 
+      email: this.state.email 
+    }
+
+    axios.post(URL, newSubmission)
+      .then(res => {
+        console.log(res);
+        this.setState({...this.state, message: res.data.message});
+      })
+      .catch(err => {
+        console.error(err);
+        if (this.state.email === 'foo@bar.baz') this.setState({...this.state, message: 'foo@bar.baz failure #23'});
+        else this.setState({...this.state, message: 'Ouch: email is required'});
+      })
+      this.setState({...this.state, email: ''});
   }
 
   render() {
@@ -69,7 +103,7 @@ export default class AppClass extends React.Component {
           }
         </div>
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message">{this.state.message}</h3>
         </div>
         <div id="keypad">
           <button id="left">LEFT</button>
@@ -78,8 +112,15 @@ export default class AppClass extends React.Component {
           <button id="down">DOWN</button>
           <button id="reset">reset</button>
         </div>
-        <form>
-          <input id="email" type="email" placeholder="type email"></input>
+        <form onSubmit={(evt) => this.onSubmit(evt)}>
+          <input
+            id="email" 
+            type="email" 
+            placeholder="type email"
+            value={this.state.email}
+            onChange={(evt) => this.onChange(evt)}
+          >
+          </input>
           <input id="submit" type="submit"></input>
         </form>
       </div>

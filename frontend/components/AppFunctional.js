@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 
 // Suggested initial states
@@ -20,7 +20,7 @@ export default function AppFunctional(props) {
   function getXY() {
     // It it not necessary to have a state to track the coordinates.
     // It's enough to know what index the "B" is at, to be able to calculate them.
-    let coordinates = {x: null, y: null};
+    let coordinates = [];
     if(index < 3) {
       x = index + 1;
       y = 1;
@@ -42,10 +42,6 @@ export default function AppFunctional(props) {
     const result = getXY();
     return(`Coordinates (${result[0]}, ${result[1]})`);
   }
-
-  useEffect(() => {
-    getXYMessage();
-  }, [index]);
 
   function reset() {
     // Use this helper to reset all states to their initial values.
@@ -95,7 +91,8 @@ export default function AppFunctional(props) {
       "x": x, 
       "y": y, 
       "steps": moveCount, 
-      "email": email }
+      "email": email
+    }
 
     axios.post(URL, newSubmission)
       .then(res => {
