@@ -59,17 +59,41 @@ export default class AppClass extends React.Component {
 
   reset = () => {
     // Use this helper to reset all states to their initial values.
+    this.setState({...this.state, 
+      message: initialMessage,
+      email: initialEmail,
+      steps: initialSteps,
+      index: initialIndex
+    })
   }
 
-  getNextIndex = (direction) => {
+  getNextIndex = async (direction) => {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
+    if(direction === 'left' && this.state.index - 1 >= 0 && x > 1) {
+      await this.move();
+      return this.setState({...this.state, index: this.state.index - 1});
+    } else if(direction === 'right' && this.state.index + 1 <= 8 && x < 3) {
+      await this.move();
+      return this.setState({...this.state, index: this.state.index + 1});
+    } else if(direction === 'up' && this.state.index - 3 >= 0 && y > 1) {
+      await this.move();
+      return this.setState({...this.state, index: this.state.index - 3});
+    } else if(direction === 'down' && this.state.index + 3 <= 8 && y < 3) {
+      await this.move();
+      return this.setState({...this.state, index: this.state.index + 3});
+    } else {
+      return this.setState({...this.state, message: `You can't go ${direction}`});
+    }
   }
 
-  move = (evt) => {
+  move = async () => {
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
+    this.setState({...this.state, message: initialMessage});
+    this.setState({...this.state, steps: this.state.steps + 1});
+    console.log(this.state);
   }
 
   onChange = (evt) => {
@@ -84,13 +108,13 @@ export default class AppClass extends React.Component {
     const newSubmission = {
       x: x,
       y: y, 
-      steps: moveCount, 
+      steps: this.state.steps, 
       email: this.state.email 
     }
+    console.log(newSubmission);
 
     axios.post(URL, newSubmission)
       .then(res => {
-        console.log(res);
         this.setState({...this.state, message: res.data.message});
       })
       .catch(err => {
@@ -107,13 +131,13 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{this.getXYMessage()}</h3>
-          <h3 id="steps">You moved 0 times</h3>
+          <h3 id="steps">You moved {this.state.steps} times</h3>
         </div>
         <div id="grid">
           {
             [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-              <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
-                {idx === 4 ? 'B' : null}
+              <div key={idx} className={`square${idx === this.state.index ? ' active' : ''}`}>
+                {idx === this.state.index ? 'B' : null}
               </div>
             ))
           }
@@ -122,11 +146,11 @@ export default class AppClass extends React.Component {
           <h3 id="message">{this.state.message}</h3>
         </div>
         <div id="keypad">
-          <button id="left">LEFT</button>
-          <button id="up">UP</button>
-          <button id="right">RIGHT</button>
-          <button id="down">DOWN</button>
-          <button id="reset">reset</button>
+          <button id="left" onClick={() => this.getNextIndex('left')}>LEFT</button>
+          <button id="up" onClick={() => this.getNextIndex('up')}>UP</button>
+          <button id="right" onClick={() => this.getNextIndex('right')}>RIGHT</button>
+          <button id="down" onClick={() => this.getNextIndex('down')}>DOWN</button>
+          <button id="reset" onClick={this.reset}>reset</button>
         </div>
         <form onSubmit={(evt) => this.onSubmit(evt)}>
           <input
