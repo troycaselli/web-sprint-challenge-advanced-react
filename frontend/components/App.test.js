@@ -15,8 +15,7 @@ test('function renders', () => {
 test('submit button renders message when valid email is entered', async () => {
   render(<AppFunctional />);
   const emailInput = screen.getByRole('textbox');
-  const submitButton = document.querySelector('#submit');
-  // const submitButton = screen.getByRole('button', {name: /submit/i});
+  const submitButton = screen.getByRole('button', {name: /submit/i});
 
   fireEvent.change(email, { target: { value: 'real@email.com' } })
   fireEvent.click(submitButton);
@@ -28,8 +27,7 @@ test('submit button renders message when valid email is entered', async () => {
 test('submit button renders proper messages when invalid email input is provided', async () => {
   render(<AppFunctional />);
     const emailInput = screen.getByRole('textbox');
-    const submitButton = document.querySelector('#submit');
-    // const submitButton = screen.getByRole('button', {name: /submit/i});
+    const submitButton = screen.getByRole('button', {name: /submit/i});
 
     fireEvent.change(emailInput, { target: { value: 'fake@email' } })
     fireEvent.click(submitButton);
