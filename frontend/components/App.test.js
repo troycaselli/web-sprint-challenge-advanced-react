@@ -51,41 +51,6 @@ test('B moves in the grid when navigation buttons are clicked', () => {
   expect(defaultActive).not.toHaveTextContent('B');
 })
 
-// test('submit button renders message when valid email is entered', async () => {
-//   render(<AppFunctional />);
-//   // const emailInput = screen.getByRole('textbox');
-//   const submitButton = screen.getByRole('button', {name: /submit/i});
-
-//   fireEvent.change(screen.getByRole('textbox'), { target: { value: 'real@email.com' } })
-//   fireEvent.click(submitButton);
-
-//   const response = await screen.findByText(/real win #26/i);
-//   expect(response).toBeInTheDocument();
-// })
-
-// test('submit button renders proper messages when invalid email input is provided', async () => {
-//   render(<AppFunctional />);
-//     // const emailInput = screen.getByRole('textbox');
-//     const submitButton = screen.getByRole('button', {name: /submit/i});
-
-//     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'fake@email' } })
-//     fireEvent.click(submitButton);
-
-//     const message = await screen.findByText(/Ouch: email must be a valid email/i);
-//     expect(message).toBeInTheDocument();
-
-//     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'foo@bar.baz' } })
-//     fireEvent.click(submitButton);
-//     await waitFor(() => {
-//       expect(message).toHaveTextContent(/foo@bar.baz failure #23/i);
-//     })
-    
-//     fireEvent.click(submitButton);
-//     await waitFor(() => {
-//       expect(message).toHaveTextContent(/Ouch: email is required/i);
-//     })
-// })
-
 test('reset button causes no message to show', async () => {
   render(<AppFunctional />);
   const up = screen.getByText(/up/i);
